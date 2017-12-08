@@ -1,5 +1,5 @@
-import * as debug from 'debug';
 import * as confit from 'confit';
+import * as debug from 'debug';
 import * as _ from 'lodash';
 import * as path from 'path';
 import * as handlers from 'shortstop-handlers';
@@ -14,7 +14,8 @@ error.log = console.error.bind(console);
 
 export function Configure(_basedir, _configOverride) {
   log('_basedir %s, _configOverride %o', _basedir, _configOverride);
-  let basedir, configOverride;
+  let basedir;
+  let configOverride;
   //settle arguments
   basedir = arguments.length && typeof arguments[0] === 'string' ? arguments[0] : process.env.nemoBaseDir || undefined;
   configOverride = !basedir && arguments.length && typeof arguments[0] === 'object' ? arguments[0] : undefined;
@@ -23,14 +24,14 @@ export function Configure(_basedir, _configOverride) {
 
   log('basedir %s, configOverride %o', basedir, configOverride);
 
-  let prom = Promiz();
+  const prom = Promiz();
 
   //hack because confit doesn't JSON.parse environment variables before merging
   //look into using shorstop handler or pseudo-handler in place of this
-  let envdata = envToJSON('data');
-  let envdriver = envToJSON('driver');
-  let envplugins = envToJSON('plugins');
-  let confitOptions = {
+  const envdata = envToJSON('data');
+  const envdriver = envToJSON('driver');
+  const envplugins = envToJSON('plugins');
+  const confitOptions = {
     protocols: {
       path: handlers.path(basedir),
       env: handlers.env(),
@@ -40,7 +41,7 @@ export function Configure(_basedir, _configOverride) {
       exec: handlers.exec(basedir),
       glob: handlers.glob(basedir),
       argv: function argHandler(val) {
-        let argv = yargs.argv;
+        const argv = yargs.argv;
         return argv[val] || '';
       }
     }
@@ -67,15 +68,15 @@ export function Configure(_basedir, _configOverride) {
     prom.fulfill(config);
   });
   return prom.promise;
-};
+}
 
-let envToJSON = function (prop) {
-  let returnJSON = {};
-  let originalValue = process.env[prop];
+const envToJSON = function (prop) {
+  const returnJSON = {};
+  const originalValue = process.env[prop];
   if (originalValue === undefined) {
     return {
-      'json': {},
-      'reset': function () {
+      json: {},
+      reset () {
       }
     };
   }
@@ -88,8 +89,8 @@ let envToJSON = function (prop) {
     error(err);
   }
   return {
-    'json': returnJSON,
-    'reset': function () {
+    json: returnJSON,
+    reset () {
       process.env[prop] = originalValue;
     }
   };

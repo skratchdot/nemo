@@ -14,8 +14,8 @@
  \*───────────────────────────────────────────────────────────────────────────*/
 /* global require,module */
 
-import * as fs from 'fs';
 import * as debug from 'debug';
+import * as fs from 'fs';
 const log = debug('nemo:log');
 const error = debug('nemo:error');
 
@@ -29,20 +29,20 @@ export function Driver() {
     setup: function doSetup(driverProps, callback) {
       log('entering doSetup');
 
-      let webdriver = require('selenium-webdriver'),
-        SeleniumServer = require('selenium-webdriver/remote').SeleniumServer,
-        proxy = require('selenium-webdriver/proxy'),
-        caps,
-        driver,
-        tgtBrowser = driverProps.browser,
-        localServer = driverProps.local || false,
-        customCaps = driverProps.serverCaps,
-        serverUrl = driverProps.server,
-        serverProps = driverProps.serverProps || {},
-        serverJar = driverProps.jar,
-        builders = driverProps.builders,
-        proxyDetails = driverProps.proxyDetails,
-        errorObject = null;
+      const webdriver = require('selenium-webdriver');
+      const SeleniumServer = require('selenium-webdriver/remote').SeleniumServer;
+      const proxy = require('selenium-webdriver/proxy');
+      let caps;
+      let driver;
+      const tgtBrowser = driverProps.browser;
+      const localServer = driverProps.local || false;
+      const customCaps = driverProps.serverCaps;
+      let serverUrl = driverProps.server;
+      const serverProps = driverProps.serverProps || {};
+      const serverJar = driverProps.jar;
+      const builders = driverProps.builders;
+      const proxyDetails = driverProps.proxyDetails;
+      let errorObject = null;
 
       function getServer() {
         log('attempt getServer');
@@ -51,14 +51,14 @@ export function Driver() {
           log('test locally');
           if (tgtBrowser !== 'chrome' && tgtBrowser !== 'phantomjs' && tgtBrowser !== 'firefox') {
             //make sure there is a jar file
-            var jarExists = fs.existsSync(serverJar);
+            const jarExists = fs.existsSync(serverJar);
             if (!jarExists) {
               error('You must specify a valid SELENIUM_JAR value. The value must point to a driver executable in your file system.');
             }
             if (serverProps.port === undefined) {
               serverProps.port = 4444;
             }
-            var server = new SeleniumServer(serverJar, serverProps);
+            const server = new SeleniumServer(serverJar, serverProps);
             server.start();
             serverUrl = server.address();
           } else {
@@ -102,7 +102,7 @@ export function Driver() {
 
       try {
 
-        var builder = new webdriver.Builder();
+        let builder = new webdriver.Builder();
         if (builders !== undefined) {
           Object.keys(builders).forEach(function (bldr) {
             builder = builder[bldr].apply(builder, builders[bldr]);

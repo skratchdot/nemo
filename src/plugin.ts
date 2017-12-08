@@ -6,25 +6,26 @@ const error = debug('nemo:error');
 log.log = console.log.bind(console);
 error.log = console.error.bind(console);
 
-export function compare (a, b) {
-  let ap, bp;
+export function compare(a, b) {
+  let ap;
+  let bp;
   ap = !Number.isNaN(a.priority) ? a.priority : Number.MIN_VALUE;
   bp = !Number.isNaN(b.priority) ? b.priority : Number.MIN_VALUE;
   ap = ap === -1 ? Number.MAX_VALUE : ap;
   bp = bp === -1 ? Number.MAX_VALUE : bp;
   return ap - bp;
-};
+}
 
-export function registration (nemo, plugins) {
+export function registration(nemo, plugins) {
   log('plugin.registration start');
-  let promiz = Promiz(),
-    pluginError,
-    registerFns = [];
-  let pluginErrored = Object.keys(plugins || {}).find(function pluginsKeys(key) {
-    let pluginConfig = plugins[key],
-      pluginArgs = pluginConfig.arguments || [],
-      modulePath = pluginConfig.module,
-      pluginModule;
+  const promiz = Promiz();
+  let pluginError;
+  const registerFns = [];
+  const pluginErrored = Object.keys(plugins || {}).find(function pluginsKeys(key) {
+    const pluginConfig = plugins[key];
+    const pluginArgs = pluginConfig.arguments || [];
+    const modulePath = pluginConfig.module;
+    let pluginModule;
 
     //register this plugin
     log(`register plugin ${key}`);
@@ -43,7 +44,7 @@ export function registration (nemo, plugins) {
     // @ts-ignore
     registerFns.push({
       fn: pluginReg(nemo, pluginArgs, pluginModule),
-      key: key,
+      key,
       priority: pluginConfig.priority || -1
     });
     return false;
@@ -58,9 +59,9 @@ export function registration (nemo, plugins) {
     promiz.fulfill(registerFns);
   }
   return promiz.promise;
-};
+}
 
-let pluginReg = function (_nemo, pluginArgs, pluginModule) {
+const pluginReg = function (_nemo, pluginArgs, pluginModule) {
   return function pluginReg(callback) {
 
     pluginArgs.push(_nemo);
@@ -71,7 +72,7 @@ let pluginReg = function (_nemo, pluginArgs, pluginModule) {
     } catch (err) {
       //dang, someone wrote a crap plugin
       error(err);
-      let pluginSetupError = new Error('Nemo plugin threw error during setup. ' + err);
+      const pluginSetupError = new Error('Nemo plugin threw error during setup. ' + err);
       pluginSetupError.name = 'nemoPluginSetupError';
       callback(pluginSetupError);
     }

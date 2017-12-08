@@ -1,22 +1,21 @@
-import { compare, registration } from './plugin';
-import * as wd from 'selenium-webdriver';
-import { Promiz } from './promise';
-import * as debug from 'debug';
 import * as async from 'async';
+import * as debug from 'debug';
+import * as wd from 'selenium-webdriver';
 import { Driver } from './driver';
 import { Install as seleniumInstall } from './install';
+import { compare, registration } from './plugin';
+import { Promiz } from './promise';
 const log = debug('nemo:log');
 const error = debug('nemo:error');
 
 log.log = console.log.bind(console);
 error.log = console.error.bind(console);
 
-
-let setup = function setup(config, cb) {
-  let nemo = {
-    'data': config.get('data'),
-    'driver': {},
-    '_config': config
+const setup = function setup(config, cb) {
+  const nemo = {
+    data: config.get('data'),
+    driver: {},
+    _config: config
   };
   registration(nemo, config.get('plugins'))
     .then(function (registerFns) {
@@ -49,9 +48,9 @@ let setup = function setup(config, cb) {
     });
 };
 
-var driversetup = function (_nemo) {
+const driversetup = function (_nemo) {
   return function driversetup(callback) {
-    var driverConfig = _nemo._config.get('driver');
+    const driverConfig = _nemo._config.get('driver');
     //do driver/view/locator/vars setup
     // @ts-ignore
     (Driver()).setup(driverConfig, function setupCallback(err, _driver) {
@@ -67,15 +66,12 @@ var driversetup = function (_nemo) {
   };
 };
 
-
-
-
-export function Setup (config) {
-  let promiz = Promiz();
+export function Setup(config) {
+  const promiz = Promiz();
   if (config.get('driver') === undefined) {
-    var errorMessage = 'Nemo essential driver properties not found in configuration';
+    const errorMessage = 'Nemo essential driver properties not found in configuration';
     error(errorMessage);
-    var badDriverProps = new Error(errorMessage);
+    const badDriverProps = new Error(errorMessage);
     badDriverProps.name = 'nemoBadDriverProps';
     process.nextTick(function () {
       promiz.reject(badDriverProps);
@@ -92,4 +88,4 @@ export function Setup (config) {
   }
 
   return promiz.promise;
-};
+}

@@ -13,13 +13,14 @@
  │   limitations under the License.                                            │
  \*───────────────────────────────────────────────────────────────────────────*/
 
-import { Promiz } from './promise';
+import * as debug from 'debug';
+import * as _ from 'lodash';
 import { Configure } from './configure';
+import { Promiz } from './promise';
 import { Setup } from './setup';
-const debug = require('debug');
+
 const log = debug('nemo:log');
 const error = debug('nemo:error');
-const _ = require('lodash');
 
 log.log = console.log.bind(console);
 error.log = console.error.bind(console);
@@ -34,8 +35,11 @@ error.log = console.error.bind(console);
 module.exports = function Nemo(_basedir, _configOverride, _cb) {
   log('Nemo constructor begin');
   //argument vars
-  var basedir, configOverride, cb, promiz;
-  var nemo = {};
+  let basedir;
+  let configOverride;
+  let cb;
+  let promiz;
+  const nemo = {};
 
   //check for confit object as single parameter
   if (arguments.length === 1 && arguments[0].get) {

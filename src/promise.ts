@@ -3,7 +3,7 @@ import * as wd from 'selenium-webdriver';
 export function Promiz() {
     //return a nodejs promise or webdriver promise
     let promiz;
-    let wdPromiz = wd.promise.defer();
+    const wdPromiz = wd.promise.defer();
     let fulfill = function (n) {
         wdPromiz.fulfill(n);
     };
@@ -14,5 +14,5 @@ export function Promiz() {
         fulfill = good;
         reject = bad;
     }) : wdPromiz.promise;
-   return {promise: promiz, fulfill, reject};
-};
+    return {promise: promiz, fulfill, reject};
+}
