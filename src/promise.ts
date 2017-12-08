@@ -1,4 +1,4 @@
-const wd = require('selenium-webdriver');
+import * as wd from 'selenium-webdriver';
 
 module.exports = function () {
     //return a nodejs promise or webdriver promise

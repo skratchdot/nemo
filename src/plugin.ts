@@ -1,12 +1,12 @@
-const debug = require('debug');
+import * as debug from 'debug';
+import * as Promiz from './promise';
 const log = debug('nemo:log');
 const error = debug('nemo:error');
-const Promiz = require('./promise');
 
 log.log = console.log.bind(console);
 error.log = console.error.bind(console);
 
-module.exports.compare = function (a, b) {
+export function compare (a, b) {
   let ap, bp;
   ap = !Number.isNaN(a.priority) ? a.priority : Number.MIN_VALUE;
   bp = !Number.isNaN(b.priority) ? b.priority : Number.MIN_VALUE;
@@ -15,8 +15,9 @@ module.exports.compare = function (a, b) {
   return ap - bp;
 };
 
-module.exports.registration = function (nemo, plugins) {
+export function registration (nemo, plugins) {
   log('plugin.registration start');
+  // @ts-ignore
   let promiz = Promiz(),
     pluginError,
     registerFns = [];
@@ -40,6 +41,7 @@ module.exports.registration = function (nemo, plugins) {
       return true;
     }
 
+    // @ts-ignore
     registerFns.push({
       fn: pluginReg(nemo, pluginArgs, pluginModule),
       key: key,
@@ -65,6 +67,7 @@ let pluginReg = function (_nemo, pluginArgs, pluginModule) {
     pluginArgs.push(_nemo);
     pluginArgs.push(callback);
     try {
+      // @ts-ignore
       pluginModule.setup.apply(this, pluginArgs);
     } catch (err) {
       //dang, someone wrote a crap plugin

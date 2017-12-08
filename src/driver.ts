@@ -14,8 +14,8 @@
  \*───────────────────────────────────────────────────────────────────────────*/
 /* global require,module */
 
-const fs = require('fs');
-const debug = require('debug');
+import * as fs from 'fs';
+import * as debug from 'debug';
 const log = debug('nemo:log');
 const error = debug('nemo:error');
 

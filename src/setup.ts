@@ -1,11 +1,11 @@
-const Plugin = require('./plugin');
-const wd = require('selenium-webdriver');
-const Promiz = require('./promise');
-const debug = require('debug');
+import { compare, registration } from './plugin';
+import * as wd from 'selenium-webdriver';
+import * as Promiz from './promise';
+import * as debug from 'debug';
+import * as async from 'async';
+import * as Driver from './driver';
 const log = debug('nemo:log');
 const error = debug('nemo:error');
-const async = require('async');
-const Driver = require('./driver');
 
 log.log = console.log.bind(console);
 error.log = console.error.bind(console);
@@ -17,14 +17,15 @@ let setup = function setup(config, cb) {
     'driver': {},
     '_config': config
   };
-  Plugin.registration(nemo, config.get('plugins'))
+  registration(nemo, config.get('plugins'))
     .then(function (registerFns) {
       //add driver setup
       registerFns.push({fn: driversetup(nemo), priority: 100});
-      registerFns = registerFns.sort(Plugin.compare).map(function (obj) {
+      registerFns = registerFns.sort(compare).map(function (obj) {
         return obj.fn;
       });
       registerFns.unshift(function setWebdriver(callback) {
+        // @ts-ignore
         nemo.wd = wd;
         callback(null);
       });
@@ -52,6 +53,7 @@ var driversetup = function (_nemo) {
   return function driversetup(callback) {
     var driverConfig = _nemo._config.get('driver');
     //do driver/view/locator/vars setup
+    // @ts-ignore
     (Driver()).setup(driverConfig, function setupCallback(err, _driver) {
       if (err) {
         callback(err);
@@ -69,6 +71,7 @@ var driversetup = function (_nemo) {
 
 
 module.exports = function (config) {
+  // @ts-ignore
   let promiz = Promiz();
   if (config.get('driver') === undefined) {
     var errorMessage = 'Nemo essential driver properties not found in configuration';

@@ -1,11 +1,12 @@
-const debug = require('debug');
+import * as debug from 'debug';
+import * as confit from 'confit';
+import * as _ from 'lodash';
+import * as path from 'path';
+import * as Promiz from './promise';
+import * as handlers from 'shortstop-handlers';
+import * as yargs from 'yargs';
+
 const log = debug('nemo:log');
-const confit = require('confit');
-const _ = require('lodash');
-const path = require('path');
-const Promiz = require('./promise');
-const handlers = require('shortstop-handlers');
-const yargs = require('yargs');
 const error = debug('nemo:error');
 
 log.log = console.log.bind(console);
@@ -22,6 +23,7 @@ module.exports = function Configure(_basedir, _configOverride) {
 
   log('basedir %s, configOverride %o', basedir, configOverride);
 
+  // @ts-ignore
   let prom = Promiz();
 
   //hack because confit doesn't JSON.parse environment variables before merging
@@ -45,6 +47,7 @@ module.exports = function Configure(_basedir, _configOverride) {
     }
   };
   if (basedir) {
+    // @ts-ignore
     confitOptions.basedir = path.join(basedir, 'config');
   }
   log('confit options', confitOptions);
@@ -53,6 +56,7 @@ module.exports = function Configure(_basedir, _configOverride) {
   _.merge(configOverride, envdata.json, envdriver.json, envplugins.json);
   log('configOverride %o', configOverride);
 
+  // @ts-ignore
   confit(confitOptions).addOverride(configOverride).create(function (err, config) {
     //reset env variables
     envdata.reset();
@@ -77,6 +81,7 @@ let envToJSON = function (prop) {
     };
   }
   try {
+    // @ts-ignore
     returnJSON[prop] = JSON.parse(process.env[prop]);
     delete process.env[prop];
   } catch (err) {
@@ -90,4 +95,3 @@ let envToJSON = function (prop) {
     }
   };
 };
-

@@ -1,8 +1,9 @@
-const path = require('path');
-const debug = require('debug');
+import * as path from 'path';
+import * as debug from 'debug';
+import { exec } from 'child_process';
+
 const log = debug('nemo:log');
 const error = debug('nemo:error');
-const exec = require('child_process').exec;
 
 log.log = console.log.bind(console);
 error.log = console.error.bind(console);

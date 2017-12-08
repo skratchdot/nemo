@@ -3,9 +3,11 @@
   "version": "3.0.0",
   "description": "Abstraction for automation test components",
   "scripts": {
-    "test": "npm run lint && mocha",
-    "test:default": "npm run lint && mocha --timeout 30000 --reporter spec",
-    "lint": "eslint --fix lib examples test --ext .json"
+    "build": "npm-run-all lint transpile test:default",
+    "lint": "eslint --fix lib examples test --ext .json",
+    "test": "mocha",
+    "test:default": "mocha --timeout 30000 --reporter spec",
+    "transpile": "tsc"
   },
   "dependencies": {
     "async": "^2.3.0",
@@ -18,11 +20,19 @@
   },
   "main": "lib/index.js",
   "devDependencies": {
+    "@types/async": "^2.0.45",
+    "@types/confit": "^2.0.3",
+    "@types/debug": "0.0.30",
+    "@types/lodash": "^4.14.88",
+    "@types/node": "^8.0.57",
+    "@types/selenium-webdriver": "^3.0.8",
+    "@types/yargs": "^10.0.0",
     "chai": "^4.1.2",
     "eslint": "^4.12.1",
     "eslint-plugin-json": "^1.2.0",
     "mocha": "^4.0.1",
     "nconf": "^0.9.1",
+    "npm-run-all": "^4.1.2",
     "typescript": "^2.6.2"
   },
   "repository": {
