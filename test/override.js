@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const path = require('path');
-const Nemo = require('../index');
+const Nemo = require('../lib/index');
 
 
 describe('@override@', function () {

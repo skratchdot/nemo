@@ -1,7 +1,7 @@
 /* global module: true, require: true, console: true */
 
 const assert = require('assert');
-const Nemo = require('../index');
+const Nemo = require('../lib/index');
 
 describe('@constructor@', function () {
   it('should return a promise with @noArguments@', function (done) {

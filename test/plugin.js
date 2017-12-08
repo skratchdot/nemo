@@ -1,7 +1,7 @@
 /* global module: true, require: true, console: true */
 const assert = require('assert');
 const path = require('path');
-const Nemo = require('../index');
+const Nemo = require('../lib/index');
 
 
 describe('@plugin@', function () {

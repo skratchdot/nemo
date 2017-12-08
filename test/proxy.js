@@ -1,4 +1,4 @@
-const Nemo = require('../index');
+const Nemo = require('../lib/index');
 const assert = require('assert');
 
 describe('@proxy@ ', function () {
