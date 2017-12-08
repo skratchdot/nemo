@@ -18,10 +18,10 @@ const setup = function setup(config, cb) {
     _config: config
   };
   registration(nemo, config.get('plugins'))
-    .then(function (registerFns) {
+    .then(function(registerFns) {
       //add driver setup
-      registerFns.push({fn: driversetup(nemo), priority: 100});
-      registerFns = registerFns.sort(compare).map(function (obj) {
+      registerFns.push({ fn: driversetup(nemo), priority: 100 });
+      registerFns = registerFns.sort(compare).map(function(obj) {
         return obj.fn;
       });
       registerFns.unshift(function setWebdriver(callback) {
@@ -31,8 +31,13 @@ const setup = function setup(config, cb) {
       });
       if (config.get('driver:selenium.version')) {
         //install before driver setup
-        log('Requested install of selenium version %s', config.get('driver:selenium.version'));
-        registerFns.unshift(seleniumInstall(config.get('driver:selenium.version')));
+        log(
+          'Requested install of selenium version %s',
+          config.get('driver:selenium.version')
+        );
+        registerFns.unshift(
+          seleniumInstall(config.get('driver:selenium.version'))
+        );
       }
       async.waterfall(registerFns, function waterfall(err) {
         if (err) {
@@ -42,18 +47,18 @@ const setup = function setup(config, cb) {
         }
       });
     })
-    .catch(function (err) {
+    .catch(function(err) {
       error(err);
       cb(err);
     });
 };
 
-const driversetup = function (_nemo) {
+const driversetup = function(_nemo) {
   return function driversetup(callback) {
     const driverConfig = _nemo._config.get('driver');
     //do driver/view/locator/vars setup
     // @ts-ignore
-    (Driver()).setup(driverConfig, function setupCallback(err, _driver) {
+    Driver().setup(driverConfig, function setupCallback(err, _driver) {
       if (err) {
         callback(err);
         return;
@@ -61,7 +66,6 @@ const driversetup = function (_nemo) {
       //set driver
       _nemo.driver = _driver;
       callback(null);
-
     });
   };
 };
@@ -69,15 +73,16 @@ const driversetup = function (_nemo) {
 export function Setup(config) {
   const promiz = Promiz();
   if (config.get('driver') === undefined) {
-    const errorMessage = 'Nemo essential driver properties not found in configuration';
+    const errorMessage =
+      'Nemo essential driver properties not found in configuration';
     error(errorMessage);
     const badDriverProps = new Error(errorMessage);
     badDriverProps.name = 'nemoBadDriverProps';
-    process.nextTick(function () {
+    process.nextTick(function() {
       promiz.reject(badDriverProps);
     });
   } else {
-    setup(config, function (err, nemo) {
+    setup(config, function(err, nemo) {
       log('got called back');
       if (err !== null) {
         promiz.reject(err);

@@ -47,16 +47,31 @@ module.exports = function Nemo(_basedir, _configOverride, _cb) {
   }
 
   //settle arguments
-  cb = (arguments.length && typeof arguments[arguments.length - 1] === 'function') ? arguments[arguments.length - 1] : undefined;
-  basedir = (arguments.length && typeof arguments[0] === 'string') ? arguments[0] : undefined;
-  configOverride = (!basedir && arguments.length && typeof arguments[0] === 'object') ? arguments[0] : undefined;
-  configOverride = (!configOverride && arguments.length && arguments[1] && typeof arguments[1] === 'object') ? arguments[1] : configOverride;
+  cb =
+    arguments.length && typeof arguments[arguments.length - 1] === 'function'
+      ? arguments[arguments.length - 1]
+      : undefined;
+  basedir =
+    arguments.length && typeof arguments[0] === 'string'
+      ? arguments[0]
+      : undefined;
+  configOverride =
+    !basedir && arguments.length && typeof arguments[0] === 'object'
+      ? arguments[0]
+      : undefined;
+  configOverride =
+    !configOverride &&
+    arguments.length &&
+    arguments[1] &&
+    typeof arguments[1] === 'object'
+      ? arguments[1]
+      : configOverride;
   basedir = basedir || process.env.nemoBaseDir || undefined;
   configOverride = configOverride || {};
   if (!cb) {
     log('returning promise');
     promiz = Promiz();
-    cb = function (err, n) {
+    cb = function(err, n) {
       if (err) {
         return promiz.reject(err);
       }
@@ -66,17 +81,17 @@ module.exports = function Nemo(_basedir, _configOverride, _cb) {
   log('basedir', basedir);
   log('configOverride', configOverride);
   Configure(basedir, configOverride)
-    .then(function (config) {
+    .then(function(config) {
       log('Configure complete');
       return Setup(config);
     })
-    .then(function (_nemo) {
+    .then(function(_nemo) {
       log('Setup complete');
       _.merge(nemo, _nemo);
       return cb(null, nemo);
     })
     .catch(cb);
-  return promiz && promiz.promise || nemo;
+  return (promiz && promiz.promise) || nemo;
 };
 
 module.exports.Configure = Configure;

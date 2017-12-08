@@ -21,7 +21,9 @@ export function registration(nemo, plugins) {
   const promiz = Promiz();
   let pluginError;
   const registerFns = [];
-  const pluginErrored = Object.keys(plugins || {}).find(function pluginsKeys(key) {
+  const pluginErrored = Object.keys(plugins || {}).find(function pluginsKeys(
+    key
+  ) {
     const pluginConfig = plugins[key];
     const pluginArgs = pluginConfig.arguments || [];
     const modulePath = pluginConfig.module;
@@ -36,7 +38,10 @@ export function registration(nemo, plugins) {
       //returning true means we bail out of building registerFns
       return true;
     }
-    if (pluginConfig.priority && pluginConfig.priority === 100 || Number.isNaN(pluginConfig.priority)) {
+    if (
+      (pluginConfig.priority && pluginConfig.priority === 100) ||
+      Number.isNaN(pluginConfig.priority)
+    ) {
       pluginError = new Error(`Plugin priority not set properly for ${key}`);
       return true;
     }
@@ -53,7 +58,6 @@ export function registration(nemo, plugins) {
   if (pluginErrored) {
     error(pluginError);
     promiz.reject(pluginError);
-
   } else {
     log(`plugin.registration fulfill with ${registerFns.length} plugins.`);
     promiz.fulfill(registerFns);
@@ -61,9 +65,8 @@ export function registration(nemo, plugins) {
   return promiz.promise;
 }
 
-const pluginReg = function (_nemo, pluginArgs, pluginModule) {
+const pluginReg = function(_nemo, pluginArgs, pluginModule) {
   return function pluginReg(callback) {
-
     pluginArgs.push(_nemo);
     pluginArgs.push(callback);
     try {
@@ -72,7 +75,9 @@ const pluginReg = function (_nemo, pluginArgs, pluginModule) {
     } catch (err) {
       //dang, someone wrote a crap plugin
       error(err);
-      const pluginSetupError = new Error('Nemo plugin threw error during setup. ' + err);
+      const pluginSetupError = new Error(
+        'Nemo plugin threw error during setup. ' + err
+      );
       pluginSetupError.name = 'nemoPluginSetupError';
       callback(pluginSetupError);
     }

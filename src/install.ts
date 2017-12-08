@@ -19,21 +19,22 @@ export function Install(version) {
     const save = process.env.NEMO_UNIT_TEST ? '' : '--save';
     const cmd = 'npm install ' + save + ' selenium-webdriver@' + version;
     log('npm install cmd', cmd);
-    exec(cmd, {cwd: path.resolve(__dirname, '..')},
-      function (err, stdout, stderr) {
-        if (stdout) {
-          log('seleniumInstall: stdout', stdout);
-        }
-        if (stderr) {
-          error('seleniumInstall: stderr', stderr);
-        }
-        if (err !== null) {
-          error('exec error', err);
-          return callback(err);
-        }
-        callback(null);
-
-      });
+    exec(cmd, { cwd: path.resolve(__dirname, '..') }, function(
+      err,
+      stdout,
+      stderr
+    ) {
+      if (stdout) {
+        log('seleniumInstall: stdout', stdout);
+      }
+      if (stderr) {
+        error('seleniumInstall: stderr', stderr);
+      }
+      if (err !== null) {
+        error('exec error', err);
+        return callback(err);
+      }
+      callback(null);
+    });
   };
-
 }

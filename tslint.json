@@ -12,11 +12,6 @@
     "no-shadowed-variable": false,
     "object-literal-sort-keys": false,
     "only-arrow-functions": false,
-    "space-before-function-paren": [true, {
-      "anonymous": "always",
-      "named": "never",
-      "asyncArrow": "always"
-    }],
     "trailing-comma": [true, {
       "multiline": "never",
       "singleline": "never"

@@ -3,10 +3,8 @@ const assert = require('assert');
 const path = require('path');
 const Nemo = require('../lib/index');
 
-
-describe('@plugin@', function () {
-
-  it('should @priorityRegister@', function (done) {
+describe('@plugin@', function() {
+  it('should @priorityRegister@', function(done) {
     process.env.nemoBaseDir = path.resolve(__dirname);
 
     Nemo(function(err, nemo) {
@@ -16,46 +14,52 @@ describe('@plugin@', function () {
       done();
     });
   });
-  it('should handle @nonexistPlugin@', function (done) {
+  it('should handle @nonexistPlugin@', function(done) {
     delete process.env.nemoBaseDir;
-    Nemo(__dirname, {
-      'driver': {
-        'browser': 'phantomjs'
-      },
-      'plugins': {
-        'noexist': {
-          'module': 'ModuleThatDoesNotExist'
+    Nemo(
+      __dirname,
+      {
+        driver: {
+          browser: 'phantomjs'
+        },
+        plugins: {
+          noexist: {
+            module: 'ModuleThatDoesNotExist'
+          }
         }
-      }
-  }, function (err) {
+      },
+      function(err) {
         if (err) {
-            done();
-            return;
+          done();
+          return;
         }
         done(new Error('didnt get the correct exception'));
-    });
+      }
+    );
   });
-  it('should handle @failedPluginRegistration@', function (done) {
+  it('should handle @failedPluginRegistration@', function(done) {
     delete process.env.nemoBaseDir;
 
-    Nemo(__dirname, {
-      'driver': {
-        'browser': 'phantomjs'
+    Nemo(
+      __dirname,
+      {
+        driver: {
+          browser: 'phantomjs'
+        },
+        plugins: {
+          crappy: {
+            module: 'path:plugin/sample',
+            arguments: ['crap plugin']
+          }
+        }
       },
-      'plugins': {
-        'crappy': {
-          'module': 'path:plugin/sample',
-          'arguments': ['crap plugin']
+      function(err) {
+        if (err && err.name && err.name === 'nemoPluginSetupError') {
+          return done();
+        } else if (err) {
+          done(err);
         }
       }
-    }, function (err) {
-
-      if (err && err.name && err.name === 'nemoPluginSetupError') {
-        return done();
-      }
-      else if (err) {
-        done(err);
-      }
-    });
+    );
   });
 });

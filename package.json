@@ -4,6 +4,9 @@
   "description": "Abstraction for automation test components",
   "scripts": {
     "build": "npm-run-all lint transpile test:default",
+    "format": "npm-run-all format:js format:ts",
+    "format:js": "prettier --write --parser babylon 'examples/**/*' 'test/**/*'",
+    "format:ts": "prettier --write 'src/**/*.ts'",
     "lint": "npm-run-all lint:js lint:ts",
     "lint:js": "eslint --fix examples test --ext .json",
     "lint:ts": "tslint --fix -c tslint.json 'src/**/*.ts'",
@@ -35,6 +38,7 @@
     "mocha": "^4.0.1",
     "nconf": "^0.9.1",
     "npm-run-all": "^4.1.2",
+    "prettier": "^1.9.1",
     "tslint": "^5.8.0",
     "typescript": "^2.6.2"
   },

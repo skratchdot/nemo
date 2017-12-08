@@ -17,9 +17,21 @@ export function Configure(_basedir, _configOverride) {
   let basedir;
   let configOverride;
   //settle arguments
-  basedir = arguments.length && typeof arguments[0] === 'string' ? arguments[0] : process.env.nemoBaseDir || undefined;
-  configOverride = !basedir && arguments.length && typeof arguments[0] === 'object' ? arguments[0] : undefined;
-  configOverride = !configOverride && arguments.length && arguments[1] && typeof arguments[1] === 'object' ? arguments[1] : configOverride;
+  basedir =
+    arguments.length && typeof arguments[0] === 'string'
+      ? arguments[0]
+      : process.env.nemoBaseDir || undefined;
+  configOverride =
+    !basedir && arguments.length && typeof arguments[0] === 'object'
+      ? arguments[0]
+      : undefined;
+  configOverride =
+    !configOverride &&
+    arguments.length &&
+    arguments[1] &&
+    typeof arguments[1] === 'object'
+      ? arguments[1]
+      : configOverride;
   configOverride = !configOverride ? {} : configOverride;
 
   log('basedir %s, configOverride %o', basedir, configOverride);
@@ -51,33 +63,39 @@ export function Configure(_basedir, _configOverride) {
     confitOptions.basedir = path.join(basedir, 'config');
   }
   log('confit options', confitOptions);
-  log('confit overrides: \ndata: %o,\ndriver: %o\nplugins: %o', envdata.json, envdriver.json, envplugins.json);
+  log(
+    'confit overrides: \ndata: %o,\ndriver: %o\nplugins: %o',
+    envdata.json,
+    envdriver.json,
+    envplugins.json
+  );
   //merge any environment JSON into configOverride
   _.merge(configOverride, envdata.json, envdriver.json, envplugins.json);
   log('configOverride %o', configOverride);
 
   // @ts-ignore
-  confit(confitOptions).addOverride(configOverride).create(function (err, config) {
-    //reset env variables
-    envdata.reset();
-    envdriver.reset();
-    envplugins.reset();
-    if (err) {
-      return prom.reject(err);
-    }
-    prom.fulfill(config);
-  });
+  confit(confitOptions)
+    .addOverride(configOverride)
+    .create(function(err, config) {
+      //reset env variables
+      envdata.reset();
+      envdriver.reset();
+      envplugins.reset();
+      if (err) {
+        return prom.reject(err);
+      }
+      prom.fulfill(config);
+    });
   return prom.promise;
 }
 
-const envToJSON = function (prop) {
+const envToJSON = function(prop) {
   const returnJSON = {};
   const originalValue = process.env[prop];
   if (originalValue === undefined) {
     return {
       json: {},
-      reset () {
-      }
+      reset() {}
     };
   }
   try {
@@ -90,7 +108,7 @@ const envToJSON = function (prop) {
   }
   return {
     json: returnJSON,
-    reset () {
+    reset() {
       process.env[prop] = originalValue;
     }
   };

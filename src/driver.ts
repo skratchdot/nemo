@@ -30,7 +30,8 @@ export function Driver() {
       log('entering doSetup');
 
       const webdriver = require('selenium-webdriver');
-      const SeleniumServer = require('selenium-webdriver/remote').SeleniumServer;
+      const SeleniumServer = require('selenium-webdriver/remote')
+        .SeleniumServer;
       const proxy = require('selenium-webdriver/proxy');
       let caps;
       let driver;
@@ -49,11 +50,17 @@ export function Driver() {
         //are we running the tests on the local machine?
         if (localServer === true) {
           log('test locally');
-          if (tgtBrowser !== 'chrome' && tgtBrowser !== 'phantomjs' && tgtBrowser !== 'firefox') {
+          if (
+            tgtBrowser !== 'chrome' &&
+            tgtBrowser !== 'phantomjs' &&
+            tgtBrowser !== 'firefox'
+          ) {
             //make sure there is a jar file
             const jarExists = fs.existsSync(serverJar);
             if (!jarExists) {
-              error('You must specify a valid SELENIUM_JAR value. The value must point to a driver executable in your file system.');
+              error(
+                'You must specify a valid SELENIUM_JAR value. The value must point to a driver executable in your file system.'
+              );
             }
             if (serverProps.port === undefined) {
               serverProps.port = 4444;
@@ -71,9 +78,12 @@ export function Driver() {
       function getCapabilities() {
         //specified valid webdriver browser key?
         if (!webdriver.Capabilities[tgtBrowser]) {
-          log('You have specified targetBrowser: ' + tgtBrowser + ' which is not a built-in webdriver.Capabilities browser option');
+          log(
+            'You have specified targetBrowser: ' +
+              tgtBrowser +
+              ' which is not a built-in webdriver.Capabilities browser option'
+          );
           caps = new webdriver.Capabilities();
-
         } else {
           caps = webdriver.Capabilities[tgtBrowser]();
         }
@@ -92,19 +102,19 @@ export function Driver() {
           if (proxyDetails.method && proxy[proxyDetails.method]) {
             return proxy[proxyDetails.method].apply(proxy, proxyDetails.args);
           } else {
-            throw new Error('nemo: proxy configuration is incomplete or does not match the selenium-webdriver/proxy API');
+            throw new Error(
+              'nemo: proxy configuration is incomplete or does not match the selenium-webdriver/proxy API'
+            );
           }
-
         } else {
           return proxy.direct();
         }
       }
 
       try {
-
         let builder = new webdriver.Builder();
         if (builders !== undefined) {
-          Object.keys(builders).forEach(function (bldr) {
+          Object.keys(builders).forEach(function(bldr) {
             builder = builder[bldr].apply(builder, builders[bldr]);
           });
         }
@@ -125,12 +135,15 @@ export function Driver() {
         callback(errorObject);
         return;
       }
-      driver.getSession().then(function () {
-        callback(null, driver);
-      }).catch(function (err) {
-        error('Encountered an error during driver getSession: %s', err);
-        callback(err);
-      });
+      driver
+        .getSession()
+        .then(function() {
+          callback(null, driver);
+        })
+        .catch(function(err) {
+          error('Encountered an error during driver getSession: %s', err);
+          callback(err);
+        });
     }
   };
 }

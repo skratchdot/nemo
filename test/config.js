@@ -2,29 +2,32 @@
 const assert = require('assert');
 const Nemo = require('../lib/index');
 
-describe('@config@', function () {
+describe('@config@', function() {
   process.env.NEMO_UNIT_TEST = 'true';
-  it('should pass confit object as nemo._config', function (done) {
-    Nemo({
-      'driver': {
-        'browser': 'phantomjs'
-      },
-      'data': {
-        'Roger': {
-          'Federer': {
-            'is': 'GOAT'
+  it('should pass confit object as nemo._config', function(done) {
+    Nemo(
+      {
+        driver: {
+          browser: 'phantomjs'
+        },
+        data: {
+          Roger: {
+            Federer: {
+              is: 'GOAT'
+            }
           }
         }
+      },
+      function(err, nemo) {
+        assert.equal(err, undefined);
+        assert(nemo._config);
+        // console.log('hi there')
+        assert.equal(nemo._config.get('data:Roger:Federer:is'), 'GOAT');
+        nemo.driver.quit().then(function() {
+          done();
+        });
       }
-    }, function (err, nemo) {
-      assert.equal(err, undefined);
-      assert(nemo._config);
-      // console.log('hi there')
-      assert.equal(nemo._config.get('data:Roger:Federer:is'), 'GOAT');
-      nemo.driver.quit().then(function () {
-        done();
-      });
-    });
+    );
   });
   // it('should install provided @selenium.version@', function (done) {
   //   var ver = '^2.53.1';
@@ -43,22 +46,25 @@ describe('@config@', function () {
   //   });
   // });
 
-  it('should throw an error for invalid @invalid.selenium.version@', function (done) {
-    Nemo({
-      'driver': {
-        'browser': 'phantomjs',
-        'selenium.version': 'foo'
+  it('should throw an error for invalid @invalid.selenium.version@', function(done) {
+    Nemo(
+      {
+        driver: {
+          browser: 'phantomjs',
+          'selenium.version': 'foo'
+        }
+      },
+      function(err, nemo) {
+        assert(err);
+        done();
       }
-    }, function (err, nemo) {
-      assert(err);
-      done();
-    });
+    );
   });
-  it('should export a Configure method', function () {
+  it('should export a Configure method', function() {
     return assert(Nemo.Configure && typeof Nemo.Configure === 'function');
   });
-  it('should export a Configure method resolving to a Confit object', function () {
-    return Nemo.Configure().then(function (confit) {
+  it('should export a Configure method resolving to a Confit object', function() {
+    return Nemo.Configure().then(function(confit) {
       return assert(confit.get);
     });
   });
