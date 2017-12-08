@@ -16,6 +16,9 @@
 
 import * as debug from 'debug';
 import * as fs from 'fs';
+import * as webdriver from 'selenium-webdriver';
+import * as proxy from 'selenium-webdriver/proxy';
+import { SeleniumServer } from 'selenium-webdriver/remote';
 const log = debug('nemo:log');
 const error = debug('nemo:error');
 
@@ -29,10 +32,6 @@ export function Driver() {
     setup: function doSetup(driverProps, callback) {
       log('entering doSetup');
 
-      const webdriver = require('selenium-webdriver');
-      const SeleniumServer = require('selenium-webdriver/remote')
-        .SeleniumServer;
-      const proxy = require('selenium-webdriver/proxy');
       let caps;
       let driver;
       const tgtBrowser = driverProps.browser;
