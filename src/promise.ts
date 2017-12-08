@@ -4,10 +4,10 @@ export function Promiz() {
   //return a nodejs promise or webdriver promise
   let promiz;
   const wdPromiz = wd.promise.defer();
-  let fulfill = function(n) {
+  let fulfill = function(n: any) {
     wdPromiz.fulfill(n);
   };
-  let reject = function(err) {
+  let reject = function(err: null | Error) {
     wdPromiz.reject(err);
   };
   promiz = global.Promise

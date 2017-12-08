@@ -12,7 +12,10 @@ const error = debug('nemo:error');
 log.log = console.log.bind(console);
 error.log = console.error.bind(console);
 
-export function Configure(_basedir, _configOverride) {
+export function Configure(
+  _basedir?: string | object,
+  _configOverride?: object
+) {
   log('_basedir %s, _configOverride %o', _basedir, _configOverride);
   let basedir;
   let configOverride;
@@ -52,7 +55,7 @@ export function Configure(_basedir, _configOverride) {
       require: handlers.require(basedir),
       exec: handlers.exec(basedir),
       glob: handlers.glob(basedir),
-      argv: function argHandler(val) {
+      argv: function argHandler(val: string) {
         const argv = yargs.argv;
         return argv[val] || '';
       }
@@ -76,7 +79,7 @@ export function Configure(_basedir, _configOverride) {
   // @ts-ignore
   confit(confitOptions)
     .addOverride(configOverride)
-    .create(function(err, config) {
+    .create(function(err?: Error, config?: any) {
       //reset env variables
       envdata.reset();
       envdriver.reset();
@@ -89,7 +92,7 @@ export function Configure(_basedir, _configOverride) {
   return prom.promise;
 }
 
-const envToJSON = function(prop) {
+const envToJSON = function(prop: string) {
   const returnJSON = {};
   const originalValue = process.env[prop];
   if (originalValue === undefined) {

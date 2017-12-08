@@ -8,8 +8,8 @@ const error = debug('nemo:error');
 log.log = console.log.bind(console);
 error.log = console.error.bind(console);
 
-export function Install(version) {
-  return function installSelenium(callback) {
+export function Install(version: string) {
+  return function installSelenium(callback: (err: null | Error) => void) {
     //check package.json
     const pkg = require(path.resolve(__dirname, '../package.json'));
     if (pkg.dependencies['selenium-webdriver'] === version) {
