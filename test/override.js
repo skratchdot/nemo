@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const path = require('path');
-const Nemo = require('../lib/index');
+const Nemo = require('../src/index');
 
 describe('@override@', function() {
   it('@fromEnv@ over config.json data', function(done) {

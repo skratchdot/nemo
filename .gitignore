@@ -1,6 +1,7 @@
-node_modules
+_site/
+coverage/
+lib/
+node_modules/
 .editorconfig
 *.log*
 .idea
-_site
-lib/
