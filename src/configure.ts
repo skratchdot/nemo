@@ -2,9 +2,9 @@ import * as debug from 'debug';
 import * as confit from 'confit';
 import * as _ from 'lodash';
 import * as path from 'path';
-import * as Promiz from './promise';
 import * as handlers from 'shortstop-handlers';
 import * as yargs from 'yargs';
+import { Promiz } from './promise';
 
 const log = debug('nemo:log');
 const error = debug('nemo:error');
@@ -12,7 +12,7 @@ const error = debug('nemo:error');
 log.log = console.log.bind(console);
 error.log = console.error.bind(console);
 
-module.exports = function Configure(_basedir, _configOverride) {
+export function Configure(_basedir, _configOverride) {
   log('_basedir %s, _configOverride %o', _basedir, _configOverride);
   let basedir, configOverride;
   //settle arguments
@@ -23,7 +23,6 @@ module.exports = function Configure(_basedir, _configOverride) {
 
   log('basedir %s, configOverride %o', basedir, configOverride);
 
-  // @ts-ignore
   let prom = Promiz();
 
   //hack because confit doesn't JSON.parse environment variables before merging

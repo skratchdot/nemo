@@ -22,7 +22,7 @@ const error = debug('nemo:error');
 log.log = console.log.bind(console);
 error.log = console.error.bind(console);
 
-function Driver() {
+export function Driver() {
   log('new Setup instance created');
 
   return {
@@ -134,4 +134,3 @@ function Driver() {
     }
   };
 }
-module.exports = Driver;

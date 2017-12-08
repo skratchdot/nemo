@@ -13,9 +13,9 @@
  │   limitations under the License.                                            │
  \*───────────────────────────────────────────────────────────────────────────*/
 
-import * as Promiz from './promise';
-const Configure = require('./configure');
-const Setup = require('./setup');
+import { Promiz } from './promise';
+import { Configure } from './configure';
+import { Setup } from './setup';
 const debug = require('debug');
 const log = debug('nemo:log');
 const error = debug('nemo:error');
@@ -51,7 +51,6 @@ module.exports = function Nemo(_basedir, _configOverride, _cb) {
   configOverride = configOverride || {};
   if (!cb) {
     log('returning promise');
-    // @ts-ignore
     promiz = Promiz();
     cb = function (err, n) {
       if (err) {

@@ -1,5 +1,5 @@
 import * as debug from 'debug';
-import * as Promiz from './promise';
+import { Promiz } from './promise';
 const log = debug('nemo:log');
 const error = debug('nemo:error');
 
@@ -17,7 +17,6 @@ export function compare (a, b) {
 
 export function registration (nemo, plugins) {
   log('plugin.registration start');
-  // @ts-ignore
   let promiz = Promiz(),
     pluginError,
     registerFns = [];

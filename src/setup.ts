@@ -1,9 +1,10 @@
 import { compare, registration } from './plugin';
 import * as wd from 'selenium-webdriver';
-import * as Promiz from './promise';
+import { Promiz } from './promise';
 import * as debug from 'debug';
 import * as async from 'async';
-import * as Driver from './driver';
+import { Driver } from './driver';
+import { Install as seleniumInstall } from './install';
 const log = debug('nemo:log');
 const error = debug('nemo:error');
 
@@ -32,7 +33,6 @@ let setup = function setup(config, cb) {
       if (config.get('driver:selenium.version')) {
         //install before driver setup
         log('Requested install of selenium version %s', config.get('driver:selenium.version'));
-        var seleniumInstall = require('./install');
         registerFns.unshift(seleniumInstall(config.get('driver:selenium.version')));
       }
       async.waterfall(registerFns, function waterfall(err) {
@@ -70,8 +70,7 @@ var driversetup = function (_nemo) {
 
 
 
-module.exports = function (config) {
-  // @ts-ignore
+export function Setup (config) {
   let promiz = Promiz();
   if (config.get('driver') === undefined) {
     var errorMessage = 'Nemo essential driver properties not found in configuration';

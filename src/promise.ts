@@ -1,6 +1,6 @@
 import * as wd from 'selenium-webdriver';
 
-module.exports = function () {
+export function Promiz() {
     //return a nodejs promise or webdriver promise
     let promiz;
     let wdPromiz = wd.promise.defer();

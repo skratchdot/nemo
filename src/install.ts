@@ -8,7 +8,7 @@ const error = debug('nemo:error');
 log.log = console.log.bind(console);
 error.log = console.error.bind(console);
 
-module.exports = function (version) {
+export function Install (version) {
   return function installSelenium(callback) {
     //check package.json
     var pkg = require(path.resolve(__dirname, '../package.json'));
